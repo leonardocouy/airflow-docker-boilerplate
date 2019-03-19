@@ -1,4 +1,4 @@
-# nuxt-docker-boilerplate
+# airflow-docker-boilerplate
 
 > Boilerplate containing a isolated Airflow environment to build data pipelines and ETL projects
 
