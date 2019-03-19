@@ -1,0 +1,35 @@
+version: "3"
+services:
+  db:
+    image: postgres:11.1-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=airflow
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "25432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+  webserver:
+    build: .
+    command: "webserver"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./plugins:/usr/local/airflow/plugins
+      - ./airflow-logs:/usr/local/airflow/logs
+  scheduler:
+    build: .
+    command: "scheduler"
+    depends_on:
+      - webserver
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./plugins:/usr/local/airflow/plugins
+      - ./airflow-logs:/usr/local/airflow/logs
+volumes:
+  pgdata:
