@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PYTHONPATH=$AIRFLOW_HOME/dags:$PYTHONPATH
+export AIRFLOW__CORE__LOAD_EXAMPLES=False
 
 AIRFLOW_HOME="/usr/local/airflow"
 CMD="airflow"
@@ -26,4 +27,4 @@ echo "Initialize database..."
 $CMD initdb
 fi
 
-exec $CMD "$@"
+exec "$@"

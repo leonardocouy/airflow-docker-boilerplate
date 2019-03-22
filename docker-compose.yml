@@ -13,7 +13,12 @@ services:
       - pgdata:/var/lib/postgresql/data/
   webserver:
     build: .
-    command: "webserver"
+    command: "airflow webserver"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: $AIRFLOW__CORE__FERNET_KEY
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@db:5432/airflow
     ports:
       - "8080:8080"
     depends_on:
@@ -24,7 +29,12 @@ services:
       - ./airflow-logs:/usr/local/airflow/logs
   scheduler:
     build: .
-    command: "scheduler"
+    command: "airflow scheduler"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: $AIRFLOW__CORE__FERNET_KEY
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@db:5432/airflow
     depends_on:
       - webserver
     volumes:
